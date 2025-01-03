@@ -16,12 +16,27 @@ def is_prime(n):
     return False
 
 def primes_up_to(n):
-    if n <= 2:
-        raise StopIteration
-    yield 2
-    for i in range(3, n, 2):
-        for x in range(3, int(i**0.5)+2, 2):
-            if not i % x:
-                break
-        else:
-            yield i
+    # Use the Sieve of Eratosthenes
+    # https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+    #
+    # Create a boolean array "prime[0..n]" and initialize
+    # all entries it as true. A value in prime[i] will
+    # finally be false if i is not a prime, else true.
+    prime = [ True for i in range(n + 1) ]
+    
+    prime[0]= False
+    prime[1]= False
+    
+    p = 2
+    while (p * p <= n):
+          
+        # If prime[p] is not changed, then it is a prime
+        if prime[p]:
+              
+            # Update all multiples of p
+            for i in range(p * 2, n + 1, p):
+                prime[i] = False
+        
+        p += 1
+
+    return [ p for p in range(n+1) if prime[p] ]
